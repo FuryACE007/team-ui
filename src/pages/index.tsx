@@ -14,8 +14,29 @@ export default function Home() {
         <meta name="viewport" content="width=device-width, initial-scale=1" />
         <link rel="icon" href="/favicon.ico" />
       </Head>
-      <main>
-        <h1 className="text-3xl font-bold underline">Hello world!</h1>
+      <main className="min-h-screen bg-slate-900 flex flex-col justify-between">
+        <div className="grid grid-cols-2 gap-8 m-4 p-4">
+          <div className="bg-white rounded-lg p-4 flex flex-col items-center">
+            <h2 className="text-xl font-bold">Card 1</h2>
+            <p className="text-gray-600">This is the first card.</p>
+          </div>
+          <div className="bg-white rounded-lg p-4 flex flex-col items-center">
+            <h2 className="text-xl font-bold">Card 2</h2>
+            <p className="text-gray-600">This is the second card.</p>
+          </div>
+          {/* Add more cards as needed */}
+        </div>
+        <div className="bg-white p-4">
+          <form className="flex items-center">
+            <input
+              className="flex-grow rounded-l-lg p-4 border-t mr-0 border-b border-l text-gray-800 border-gray-200 bg-white"
+              placeholder="Write a message..."
+            />
+            <button className="px-8 rounded-r-lg bg-blue-400 text-gray-800 font-bold p-4 uppercase border-blue-500 border-t border-b border-r">
+              Send
+            </button>
+          </form>
+        </div>
       </main>
     </>
   );
