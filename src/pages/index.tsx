@@ -1,11 +1,66 @@
 import Head from "next/head";
-import Image from "next/image";
 import { Inter } from "next/font/google";
-import styles from "@/styles/Home.module.css";
-
-const inter = Inter({ subsets: ["latin"] });
+import { useState } from "react";
 
 export default function Home() {
+  const [candidates, setCandidates] = useState<
+    {
+      name: string;
+      country: null | string;
+      availability: string;
+      skills: string[];
+      partTimeSalaryCurrency: string;
+      partTimeSalary: string;
+    }[]
+  >([]);
+  const queryHandler = (e: { preventDefault: () => void }) => {
+    e.preventDefault();
+    const data = [
+      {
+        name: "John Hernandez",
+        country: null,
+        availability: "immediately",
+        skills: ["HTML/CSS", "JavaScript", "React"],
+        partTimeSalaryCurrency: "USD",
+        partTimeSalary: "1108",
+      },
+      {
+        name: "James Garcia",
+        country: null,
+        availability: "immediately",
+        skills: ["AWS", "JavaScript", "Node.js", "React", "TypeScript"],
+        partTimeSalaryCurrency: "USD",
+        partTimeSalary: "1795.5",
+      },
+      {
+        name: "Jessica Wilson",
+        country: null,
+        availability: "oneMonth",
+        skills: ["HTML/CSS", "Java", "JavaScript", "Next.js", "React"],
+        partTimeSalaryCurrency: "USD",
+        partTimeSalary: "3241.5",
+      },
+      {
+        name: "Jennifer Anderson",
+        country: null,
+        availability: "immediately",
+        skills: ["Express.js", "HTML/CSS", "JavaScript", "Node.js", "React"],
+        partTimeSalaryCurrency: "USD",
+        partTimeSalary: "3814",
+      },
+      {
+        name: "William Garcia",
+        country: null,
+        availability: "sixMonth",
+        skills: ["C++", "JavaScript", "Node.js", "React", "TypeScript"],
+        partTimeSalaryCurrency: "USD",
+        partTimeSalary: "3113",
+      },
+    ];
+
+    setCandidates(data);
+  };
+
   return (
     <>
       <Head>
@@ -15,16 +70,35 @@ export default function Home() {
         <link rel="icon" href="/favicon.ico" />
       </Head>
       <main className="min-h-screen bg-slate-900 flex flex-col justify-between">
+        {/* Cards go here */}
         <div className="grid grid-cols-2 gap-8 m-4 p-4">
-          <div className="bg-white rounded-lg p-4 flex flex-col items-center">
-            <h2 className="text-xl font-bold">Card 1</h2>
-            <p className="text-gray-600">This is the first card.</p>
-          </div>
-          <div className="bg-white rounded-lg p-4 flex flex-col items-center">
-            <h2 className="text-xl font-bold">Card 2</h2>
-            <p className="text-gray-600">This is the second card.</p>
-          </div>
-          {/* Add more cards as needed */}
+          {candidates.map((candidate, index) => (
+            <div
+              key={index}
+              className="bg-white p-4 rounded-lg shadow-lg flex flex-col"
+            >
+              <h2 className="text-xl font-bold text-gray-800">
+                {candidate.name}
+              </h2>
+              <p className="text-gray-600">{candidate.availability}</p>
+              <div className="flex flex-col">
+                <h3 className="text-lg font-bold text-gray-800">Skills</h3>
+                <ul className="list-disc list-inside">
+                  {candidate.skills.map((skill, index) => (
+                    <li key={index} className="text-gray-600">
+                      {skill}
+                    </li>
+                  ))}
+                </ul>
+              </div>
+              <div className="flex flex-col">
+                <h3 className="text-lg font-bold text-gray-800">Salary</h3>
+                <p className="text-gray-600">
+                  {candidate.partTimeSalaryCurrency} {candidate.partTimeSalary}
+                </p>
+              </div>
+            </div>
+          ))}
         </div>
         <div className="bg-white p-4">
           <form className="flex items-center">
@@ -32,7 +106,10 @@ export default function Home() {
               className="flex-grow rounded-l-lg p-4 border-t mr-0 border-b border-l text-gray-800 border-gray-200 bg-white"
               placeholder="Write a message..."
             />
-            <button className="px-8 rounded-r-lg bg-blue-400 text-gray-800 font-bold p-4 uppercase border-blue-500 border-t border-b border-r">
+            <button
+              className="px-8 rounded-r-lg bg-blue-400 text-gray-800 font-bold p-4 uppercase border-blue-500 border-t border-b border-r"
+              onClick={queryHandler}
+            >
               Send
             </button>
           </form>
