@@ -9,6 +9,8 @@ interface Candidate {
   skills: string[];
   partTimeSalaryCurrency: string;
   partTimeSalary: string;
+  fullTimeSalaryCurrency: string;
+  fullTimeSalary: string;
 }
 
 export default function Home() {
@@ -20,7 +22,7 @@ export default function Home() {
     setLoading(true);
     try {
       const response = await axios.get<Candidate[]>(
-        "http://localhost:3000/candidates?partTime=true&fullTime=false&budget=5000&skills=React&page=1&limit=5"
+        "http://localhost:3000/candidates?partTime=true&fullTime=true&budget=5000&skills=React&page=1&limit=5"
       );
       setCandidates(response.data);
     } catch (error) {
@@ -65,10 +67,18 @@ export default function Home() {
                 </div>
                 <div className="flex flex-col">
                   <h3 className="text-lg font-bold text-gray-800">Salary</h3>
-                  <p className="text-gray-600">
-                    {candidate.partTimeSalaryCurrency}{" "}
-                    {candidate.partTimeSalary}
-                  </p>
+                  {candidate.partTimeSalary && (
+                    <p className="text-gray-600">
+                      {candidate.partTimeSalaryCurrency}{" "}
+                      {candidate.partTimeSalary}
+                    </p>
+                  )}
+                  {candidate.fullTimeSalary && (
+                    <p className="text-gray-600">
+                      {candidate.fullTimeSalaryCurrency}{" "}
+                      {candidate.fullTimeSalary}
+                    </p>
+                  )}
                 </div>
               </div>
             ))
