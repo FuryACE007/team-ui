@@ -1,5 +1,5 @@
 import Head from "next/head";
-import { useState } from "react";
+import { useRef, useState } from "react";
 import axios from "axios";
 
 interface Candidate {
@@ -17,12 +17,32 @@ export default function Home() {
   const [candidates, setCandidates] = useState<Candidate[]>([]);
   const [loading, setLoading] = useState(false);
 
+  const inputRef = useRef<HTMLInputElement>(null);
+
   const queryHandler = async (e: React.MouseEvent<HTMLButtonElement>) => {
     e.preventDefault();
     setLoading(true);
     try {
+      const inputSentence = inputRef.current?.value || ""; // get the value of the input box
+
+      const skillsMatch = inputSentence.match(/with ([\w\s,]+) knowledge/i);
+      const skills = skillsMatch
+        ? skillsMatch[1].replace(/\s/g, "").split(",")
+        : [];
+
+      const budgetMatch = inputSentence.match(/budget is (\d+)/i);
+      const budget = budgetMatch ? budgetMatch[1] : "";
+
+      const partTimeMatch = inputSentence.match(/part[-\s]*time/i);
+      const partTime = partTimeMatch ? "true" : "false";
+
+      const fullTimeMatch = inputSentence.match(/full[-\s]*time/i);
+      const fullTime = fullTimeMatch ? "true" : "false";
+
       const response = await axios.get<Candidate[]>(
-        "http://localhost:3000/candidates?partTime=true&fullTime=true&budget=5000&skills=React&page=1&limit=5"
+        `http://localhost:3000/candidates?partTime=${partTime}&fullTime=${fullTime}&budget=${budget}&skills=${skills.join(
+          ","
+        )}&page=1&limit=10`
       );
       setCandidates(response.data);
     } catch (error) {
@@ -69,13 +89,13 @@ export default function Home() {
                   <h3 className="text-lg font-bold text-gray-800">Salary</h3>
                   {candidate.partTimeSalary && (
                     <p className="text-gray-600">
-                      {candidate.partTimeSalaryCurrency}{" "}
+                      Part time salary {candidate.partTimeSalaryCurrency}{" "}
                       {candidate.partTimeSalary}
                     </p>
                   )}
                   {candidate.fullTimeSalary && (
                     <p className="text-gray-600">
-                      {candidate.fullTimeSalaryCurrency}{" "}
+                      Full time salary {candidate.fullTimeSalaryCurrency}{" "}
                       {candidate.fullTimeSalary}
                     </p>
                   )}
@@ -89,6 +109,8 @@ export default function Home() {
             <input
               className="flex-grow rounded-l-lg p-4 border-t mr-0 border-b border-l text-gray-800 border-gray-200 bg-white"
               placeholder="Write a message..."
+              ref={inputRef}
+              type="text"
             />
             <button
               className="px-8 rounded-r-lg bg-blue-400 text-gray-800 font-bold p-4 uppercase border-blue-500 border-t border-b border-r"
